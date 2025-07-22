@@ -2,13 +2,14 @@ import {
   WebSocketGateway,
   SubscribeMessage,
   MessageBody,
+  WebSocketServer,
   ConnectedSocket,
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { JwtService } from '@nestjs/jwt';
 import { MessageService } from '../message/message.service';
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 interface JwtPayload {
@@ -18,6 +19,8 @@ interface JwtPayload {
 @WebSocketGateway({ cors: true })
 @Injectable()
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  @WebSocketServer()
+  server: Server;
   constructor(
     private readonly jwtService: JwtService,
     private readonly messageService: MessageService
@@ -60,8 +63,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       data.text
     );
 
-    // Отправляем сообщение всем в комнате
-    client.to(data.roomId).emit('message', {
+    // Отправляем сообщение всем в комнате и себе
+    this.server.to(data.roomId).emit('message', {
       _id: message._id,
       text: message.text,
       author: { userId },
