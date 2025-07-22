@@ -6,6 +6,8 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
+      // super({ … }) настраивает правила извлечения и проверки токена.
+
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // Извлекаем токен из заголовка Authorization: Bearer <token>
       ignoreExpiration: false, //  токен считается недействительным сразу после окончания срока действия.
       secretOrKey: process.env.JWT_SECRET || 'SECRET_KEY', // Секретный ключ для проверки подписи
