@@ -1,5 +1,7 @@
 ## Here is only the back part of the project, you can communicate with all participants of the room and yourself through the console!
- After starting the server, run the file test-client.js with the command: node test-client.js
+
+ The project has authorization and registration of users with a jvt token.
+ After starting the server, run the file test-client.js with the command: # node test-client.js
 
 # Chat
 
